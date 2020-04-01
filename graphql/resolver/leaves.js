@@ -23,7 +23,7 @@ module.exports = {
   },
 
   createLeave: (args, req) => {
-    let auth = "5e8238bd19f38b2718b8c3b9";
+    const auth = "5e84d383261444221cb4ac82";
     // if (!req.isAuth) {
     if (!auth) {
       throw new Error("Unauthenticated");

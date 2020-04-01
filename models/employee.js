@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+let validator = require("validator");
 
 const Schema = mongoose.Schema;
 
@@ -7,10 +8,10 @@ const employeeSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    lowercase: true
-    // validate: value => {
-    //   return validator.isEmail(value);
-    // }
+    lowercase: true,
+    validate: value => {
+      return validator.isEmail(value);
+    }
   },
 
   password: {
