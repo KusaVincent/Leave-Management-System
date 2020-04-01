@@ -1,7 +1,13 @@
+const express = require("express");
+const bodyParser = require("body-parser");
+
 const Leave = require("../../models/leave");
 const Employee = require("../../models/employee");
 const { dateToString } = require("../../helpers/date");
 const { transformLeave } = require("./merge");
+
+const app = express();
+app.use(bodyParser.json());
 
 module.exports = {
   leaves: () => {
@@ -17,14 +23,16 @@ module.exports = {
   },
 
   createLeave: (args, req) => {
+    let auth = "5e8238bd19f38b2718b8c3b9";
     // if (!req.isAuth) {
-    //   throw new Error("Unauthenticated");
-    // }
+    if (!auth) {
+      throw new Error("Unauthenticated");
+    }
     const leave = new Leave({
       leave_type: args.leaveInput.leave_type,
-      leave_from: args.leaveInput.leave_from,
-      leave_to: args.leaveInput.leave_to,
-      applied_by: req.employeeId
+      leave_from: dateToString(args.leaveInput.leave_from),
+      leave_to: dateToString(args.leaveInput.leave_to),
+      applied_by: auth
     });
 
     let leaveApplied;
@@ -32,20 +40,20 @@ module.exports = {
       .save()
       .then(result => {
         leaveApplied = transformLeave(result);
-        return Employee.findById(req.employeeId);
+        return Employee.findById(auth);
       })
       .then(employee => {
         if (!employee) {
-          throw new Error("employee not found");
+          throw new Error("Employee not found");
         }
-        // employee.leavesApplied.push(leave);
+        employee.leaveApplications.push(leave);
         return employee.save();
       })
       .then(result => {
         return leaveApplied;
       })
       .catch(err => {
-        console.log(err);
+        console.log(JSON.stringify(err));
         throw err;
       });
   }
