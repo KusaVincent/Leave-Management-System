@@ -14,11 +14,13 @@ const employeeLoader = new DataLoader(employeeIds => {
 const leaves = async leaveIds => {
   try {
     const leaves = await Leave.find({ _id: { $in: leaveIds } });
+
     leaves.sort((a, b) => {
       return (
         leaveIds.indexOf(a._id.toString()) - leaveIds.indexOf(b._id.toString())
       );
     });
+
     return leaves.map(leave => {
       return transformLeave(leave);
     });
@@ -30,6 +32,7 @@ const leaves = async leaveIds => {
 const singleLeave = async leaveId => {
   try {
     const leave = await leaveLoader.load(leaveId.toString());
+
     return leave;
   } catch (err) {
     throw err;
@@ -73,7 +76,3 @@ const transformAppliedLeave = appliedLeave => {
 
 exports.transformLeave = transformLeave;
 exports.transformAppliedLeave = transformAppliedLeave;
-
-// exports.employee = employee;
-// exports.leaves = leaves;
-// exports.singleLeave = singleleave;

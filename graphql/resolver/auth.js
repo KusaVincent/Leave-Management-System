@@ -1,14 +1,17 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const Employee = require("../../models/employee");
 
 module.exports = {
   createEmployee: args => {
     return Employee.findOne({ email: args.employeeInput.email })
+
       .then(employee => {
         if (employee) {
           throw new Error("Employee already exist");
         }
+
         return bcrypt.hash(args.employeeInput.password, 12);
       })
       .then(hashedPassword => {
@@ -23,6 +26,7 @@ module.exports = {
           department: args.employeeInput.department,
           payroll_number: args.employeeInput.payroll_number
         });
+
         return employee.save();
       })
       .then(result => {
@@ -34,13 +38,17 @@ module.exports = {
   },
   login: async ({ email, password }) => {
     const employee = await Employee.findOne({ email: email });
+
     if (!employee) {
       throw new Error("employee don't exist");
     }
+
     const isEqual = await bcrypt.compare(password, employee.password);
+
     if (!isEqual) {
       throw new Error("password is incorrect");
     }
+
     const token = jwt.sign(
       { employeeId: employee.id, email: employee.email },
       "somesupersecretkey",
@@ -48,6 +56,7 @@ module.exports = {
         expiresIn: "1h"
       }
     );
+
     return { employeeId: employee.id, token: token, tokenExpiration: 1 };
   }
 };

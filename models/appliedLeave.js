@@ -8,11 +8,13 @@ const appliedLeaveSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Leave"
     },
+
     employee: {
       type: Schema.Types.ObjectId,
       ref: "Employee"
     }
   },
+
   { timestamps: true }
 );
 

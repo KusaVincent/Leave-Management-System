@@ -12,43 +12,52 @@ const employeeSchema = new Schema({
     //   return validator.isEmail(value);
     // }
   },
+
   password: {
     type: String,
     required: true
   },
+
   employee_id: {
     type: String,
     unique: true,
     required: true
   },
+
   first_name: {
     type: String,
     uppercase: true,
     required: true
   },
+
   second_name: {
     type: String,
     uppercase: true,
     required: true
   },
+
   phone_number: {
     type: String,
     required: true
   },
+
   supervisor_id: {
     type: String,
     required: true
   },
+
   department: {
     type: String,
     uppercase: true,
     required: true
   },
+
   payroll_number: {
     type: String,
     unique: true,
     required: true
   },
+
   leaveApplications: [
     {
       type: Schema.Types.ObjectId,

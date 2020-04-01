@@ -28,6 +28,7 @@ module.exports = {
     if (!auth) {
       throw new Error("Unauthenticated");
     }
+
     const leave = new Leave({
       leave_type: args.leaveInput.leave_type,
       leave_from: dateToString(args.leaveInput.leave_from),
@@ -40,6 +41,7 @@ module.exports = {
       .save()
       .then(result => {
         leaveApplied = transformLeave(result);
+
         return Employee.findById(auth);
       })
       .then(employee => {
@@ -47,6 +49,7 @@ module.exports = {
           throw new Error("Employee not found");
         }
         employee.leaveApplications.push(leave);
+
         return employee.save();
       })
       .then(result => {
@@ -54,6 +57,7 @@ module.exports = {
       })
       .catch(err => {
         console.log(JSON.stringify(err));
+
         throw err;
       });
   }
