@@ -2,18 +2,21 @@ const Leave = require("../../models/leave");
 const AppliedLeave = require("../../models/appliedLeave");
 const { transformAppliedLeave, transformleave } = require("./merge");
 
+const auth = "5e919c8cac5ba9047ce75287";
+
 module.exports = {
   appliedLeaves: async (args, req) => {
-    if (!req.isAuth) {
+    if (!auth) {
+      // if (!req.isAuth) {
       throw new Error("Unauthenticated");
     }
 
     try {
       const appliedLeaves = await AppliedLeave.find({
-        employee: req.employeeId
+        employee: auth,
       });
 
-      return appliedLeaves.map(appliedLeave => {
+      return appliedLeaves.map((appliedLeave) => {
         return transformAppliedLeave(appliedLeave);
       });
     } catch (err) {
@@ -22,15 +25,16 @@ module.exports = {
   },
 
   applyLeave: async (args, req) => {
-    if (!req.isAuth) {
+    if (!auth) {
+      // if (!req.isAuth) {
       throw new Error("Unauthenticated");
     }
 
     const fetchedLeave = await Leave.findOne({ _id: args.leaveId });
 
     const appliedLeave = new AppliedLeave({
-      employee: req.employeeId,
-      leave: fetchedLeave
+      employee: auth,
+      leave: fetchedLeave,
     });
 
     const result = await appliedLeave.save();
@@ -38,7 +42,8 @@ module.exports = {
     return transformAppliedLeave(result);
   },
   cancelAppliedLeave: async (args, req) => {
-    if (!req.isAuth) {
+    if (!auth) {
+      // if (!req.isAuth) {
       throw new Error("Unauthenticated");
     }
 
@@ -55,5 +60,5 @@ module.exports = {
     } catch (err) {
       throw err;
     }
-  }
+  },
 };

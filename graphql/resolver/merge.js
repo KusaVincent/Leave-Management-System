@@ -3,15 +3,15 @@ const Leave = require("../../models/leave");
 const Employee = require("../../models/employee");
 const { dateToString } = require("../../helpers/date");
 
-const leaveLoader = new DataLoader(leaveIds => {
+const leaveLoader = new DataLoader((leaveIds) => {
   return leaves(leaveIds);
 });
 
-const employeeLoader = new DataLoader(employeeIds => {
+const employeeLoader = new DataLoader((employeeIds) => {
   return Employee.find({ _id: { $in: employeeIds } });
 });
 
-const leaves = async leaveIds => {
+const leaves = async (leaveIds) => {
   try {
     const leaves = await Leave.find({ _id: { $in: leaveIds } });
 
@@ -21,7 +21,7 @@ const leaves = async leaveIds => {
       );
     });
 
-    return leaves.map(leave => {
+    return leaves.map((leave) => {
       return transformLeave(leave);
     });
   } catch (err) {
@@ -29,7 +29,7 @@ const leaves = async leaveIds => {
   }
 };
 
-const singleLeave = async leaveId => {
+const singleLeave = async (leaveId) => {
   try {
     const leave = await leaveLoader.load(leaveId.toString());
 
@@ -39,38 +39,38 @@ const singleLeave = async leaveId => {
   }
 };
 
-const employee = employeeId => {
+const employee = (employeeId) => {
   return employeeLoader
     .load(employeeId.toString())
-    .then(employee => {
+    .then((employee) => {
       return {
         ...employee._doc,
         id: employee.id,
-        leavesApplied: () => leaveLoader.loadMany(employee._doc.leavesApplied)
+        leavesApplied: () => leaveLoader.loadMany(employee._doc.leavesApplied),
       };
     })
-    .catch(err => {
+    .catch((err) => {
       throw err;
     });
 };
 
-const transformLeave = leave => {
+const transformLeave = (leave) => {
   return {
     ...leave._doc,
     id: leave.id,
     date: leave._doc.date,
-    applied_by: employee.bind(this, leave.applied_by)
+    appliedBy: employee.bind(this, leave.appliedBy),
   };
 };
 
-const transformAppliedLeave = appliedLeave => {
+const transformAppliedLeave = (appliedLeave) => {
   return {
     ...appliedLeave._doc,
     _id: appliedLeave.id,
     employee: employee.bind(this, appliedLeave._doc.employee),
     leave: singleLeave.bind(this, appliedLeave._doc.leave),
     createdAt: dateToString(appliedLeave._doc.createdAt),
-    updatedAt: dateToString(appliedLeave._doc.updatedAt)
+    updatedAt: dateToString(appliedLeave._doc.updatedAt),
   };
 };
 

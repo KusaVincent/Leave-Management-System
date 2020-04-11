@@ -12,39 +12,39 @@ app.use(bodyParser.json());
 module.exports = {
   leaves: () => {
     return Leave.find()
-      .then(leaves => {
-        return leaves.map(leave => {
+      .then((leaves) => {
+        return leaves.map((leave) => {
           return transformLeave(leave);
         });
       })
-      .catch(err => {
+      .catch((err) => {
         throw err;
       });
   },
 
   createLeave: (args, req) => {
-    const auth = "5e84d383261444221cb4ac82";
+    const auth = "5e919c8cac5ba9047ce75287";
     // if (!req.isAuth) {
     if (!auth) {
       throw new Error("Unauthenticated");
     }
 
     const leave = new Leave({
-      leave_type: args.leaveInput.leave_type,
-      leave_from: dateToString(args.leaveInput.leave_from),
-      leave_to: dateToString(args.leaveInput.leave_to),
-      applied_by: auth
+      leaveType: args.leaveInput.leaveType,
+      leaveFrom: dateToString(args.leaveInput.leaveFrom),
+      leaveTo: dateToString(args.leaveInput.leaveTo),
+      appliedBy: auth,
     });
 
     let leaveApplied;
     return leave
       .save()
-      .then(result => {
+      .then((result) => {
         leaveApplied = transformLeave(result);
 
         return Employee.findById(auth);
       })
-      .then(employee => {
+      .then((employee) => {
         if (!employee) {
           throw new Error("Employee not found");
         }
@@ -52,13 +52,13 @@ module.exports = {
 
         return employee.save();
       })
-      .then(result => {
+      .then((result) => {
         return leaveApplied;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(JSON.stringify(err));
 
         throw err;
       });
-  }
+  },
 };

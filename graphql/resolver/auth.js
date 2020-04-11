@@ -4,35 +4,35 @@ const jwt = require("jsonwebtoken");
 const Employee = require("../../models/employee");
 
 module.exports = {
-  createEmployee: args => {
+  createEmployee: (args) => {
     return Employee.findOne({ email: args.employeeInput.email })
 
-      .then(employee => {
+      .then((employee) => {
         if (employee) {
           throw new Error("Employee already exist");
         }
 
         return bcrypt.hash(args.employeeInput.password, 12);
       })
-      .then(hashedPassword => {
+      .then((hashedPassword) => {
         const employee = new Employee({
           email: args.employeeInput.email,
           password: hashedPassword,
-          phone_number: args.employeeInput.phone_number,
-          first_name: args.employeeInput.first_name,
-          second_name: args.employeeInput.second_name,
-          employee_id: args.employeeInput.employee_id,
-          supervisor_id: args.employeeInput.supervisor_id,
+          phoneNumber: args.employeeInput.phoneNumber,
+          firstName: args.employeeInput.firstName,
+          secondName: args.employeeInput.secondName,
+          employeesId: args.employeeInput.employeesId,
+          supervisorId: args.employeeInput.supervisorId,
           department: args.employeeInput.department,
-          payroll_number: args.employeeInput.payroll_number
+          payrollNumber: args.employeeInput.payrollNumber,
         });
 
         return employee.save();
       })
-      .then(result => {
+      .then((result) => {
         return { ...result._doc, password: null, _id: result.id };
       })
-      .catch(err => {
+      .catch((err) => {
         throw err;
       });
   },
@@ -53,10 +53,10 @@ module.exports = {
       { employeeId: employee.id, email: employee.email },
       "somesupersecretkey",
       {
-        expiresIn: "1h"
+        expiresIn: "1h",
       }
     );
 
     return { employeeId: employee.id, token: token, tokenExpiration: 1 };
-  }
+  },
 };

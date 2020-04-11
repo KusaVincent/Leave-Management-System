@@ -12,23 +12,23 @@ module.exports = buildSchema(`
 
     type Leave {
         _id: ID!
-        leave_type: String!
-        leave_from: String!
-        leave_to: String!
-        applied_by: Employee!
+        leaveType: String!
+        leaveFrom: String!
+        leaveTo: String!
+        appliedBy: Employee!
     }
 
     type Employee {
         _id: ID!
         email: String!
         password: String
-        employee_id: String!
-        first_name: String!
-        second_name: String!
-        phone_number: String!
-        supervisor_id: String!
+        employeesId: String!
+        firstName: String!
+        secondName: String!
+        phoneNumber: String!
+        supervisorId: String!
         department: String!
-        payroll_number: String!
+        payrollNumber: String!
         leavesApplied: [Leave!]
     }
 
@@ -39,21 +39,21 @@ module.exports = buildSchema(`
     }
 
     input LeaveInput {
-        leave_type: String!
-        leave_from: String!
-        leave_to: String!
+        leaveType: String!
+        leaveFrom: String!
+        leaveTo: String!
     }
 
     input EmployeeInput {
         email: String!
         password: String!
-        employee_id: String!
-        first_name: String!
-        second_name: String!
-        phone_number: String!
-        supervisor_id: String!
+        employeesId: String!
+        firstName: String!
+        secondName: String!
+        phoneNumber: String!
+        supervisorId: String!
         department: String!
-        payroll_number: String!
+        payrollNumber: String!
     }
 
     type RootQuery {

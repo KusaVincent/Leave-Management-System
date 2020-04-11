@@ -11,7 +11,7 @@ const app = express();
 
 let url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-4orpk.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 
-let PORT = 3000;
+let PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
@@ -34,7 +34,7 @@ app.use(
   graphqlHttp({
     schema: graphqlSchema,
     rootValue: graphqlResolver,
-    graphiql: true
+    graphiql: true,
   })
 );
 
@@ -42,7 +42,7 @@ mongoose
   .connect(url, {
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useNewUrlParser: true
+    useNewUrlParser: true,
   })
   .then(() => app.listen(PORT))
-  .catch(err => console.log(JSON.stringify(err.message)));
+  .catch((err) => console.log(JSON.stringify(err.message)));

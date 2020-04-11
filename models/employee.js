@@ -9,62 +9,62 @@ const employeeSchema = new Schema({
     required: true,
     unique: true,
     lowercase: true,
-    validate: value => {
+    validate: (value) => {
       return validator.isEmail(value);
-    }
+    },
   },
 
   password: {
     type: String,
-    required: true
+    required: true,
   },
 
-  employee_id: {
+  employeesId: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
 
-  first_name: {
+  firstName: {
     type: String,
     uppercase: true,
-    required: true
+    required: true,
   },
 
-  second_name: {
+  secondName: {
     type: String,
     uppercase: true,
-    required: true
+    required: true,
   },
 
-  phone_number: {
+  phoneNumber: {
     type: String,
-    required: true
+    required: true,
   },
 
-  supervisor_id: {
+  supervisorId: {
     type: String,
-    required: true
+    required: true,
   },
 
   department: {
     type: String,
     uppercase: true,
-    required: true
+    required: true,
   },
 
-  payroll_number: {
+  payrollNumber: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
 
   leaveApplications: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Leave"
-    }
-  ]
+      ref: "Leave",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Employee", employeeSchema);

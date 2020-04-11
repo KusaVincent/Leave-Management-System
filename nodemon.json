@@ -2,6 +2,7 @@
   "env": {
     "MONGO_USER": "KUSA",
     "MONGO_PASSWORD": "3o83iOjKVWlYmX0U",
-    "MONGO_DB": "LEAVE_MANAGEMENT_SYSTEM"
+    "MONGO_DB": "LEAVE_MANAGEMENT_SYSTEM",
+    "PORT": 5000
   }
 }
